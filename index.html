@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Bytter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+    <script src="tock.js" type="text/javascript"></script>
+    <script src="player.js" type="text/javascript"></script>
+
+</head>
+<body>
+    <div data-role="page">
+
+        <div data-role="header" data-position="fixed">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#" onclick="startOrStopAll()" data-icon="info"></a></li>
+                    <li><a href="#" id="startOrStopAll" data-icon="clock"></a></li>
+                    <li><a href="#popupLogin"
+                           data-rel="popup"
+                           data-position-to="window"
+                           data-inline="true" data-icon="plus"></a>
+                    </li>
+                </ul>
+            </div>
+        </div><!-- /header -->
+
+        <div data-role="popup" id="popupLogin" class="ui-corner-all">
+            <form id="addPlayerForm">
+                <div style="padding:10px 20px;">
+                    <h3>Legg til spiller</h3>
+                    <label for="addPlayerName" class="ui-hidden-accessible">Navn:</label>
+                    <input type="text"  id="addPlayerName" value="" placeholder="spiller" data-theme="a" />
+
+                    <button id="addPlayer" type="submit">Legg til</button>
+                </div>
+            </form>
+        </div>
+
+        <div data-role="content">
+            <table data-role="table" id="player-table" class="ui-responsive table-stroke">
+                <thead>
+                <tr>
+                    <th data-priority="persist">Navn</th>
+                    <th data-priority="1">Spilletid</th>
+                    <th data-priority="2">Totalt</th>
+                    <th data-priority="persist"></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div><!-- /content -->
+
+        <div data-role="footer" data-position="fixed">
+
+        </div><!-- /footer -->
+
+    </div><!-- /page -->
+
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            swapPlayer = function(id) {
+                players[id].swap();
+                return false;
+            }
+
+            $("#startOrStopAll").click(function(){
+                matchRunning = !matchRunning;
+
+                for (var i = 0; i < players.length; i++){
+                    if (matchRunning) {
+                        players[i].start();
+                    } else {
+                        players[i].stop();
+                    }
+                }
+            });
+
+
+            $("#addPlayerForm").submit(function(event) {
+                var val = $("#addPlayerName").val();
+
+                var newPlayer = new Player(val);
+
+                players[players.length] = newPlayer;
+
+                var newRow = '<tr valign="top">' +
+                        "<td>" + newPlayer.name + "</td>" +
+                        '<td><input type="text"  id="current' + newPlayer.id + '" placeholder="00:00" data-theme="a"/></td>' +
+                        '<td><input type="text"  id="total' + newPlayer.id + '" placeholder="00:00" data-theme="a"/></td>' +
+                        '<td><select id="flip' + newPlayer.id + '" onchange="swapPlayer(' + newPlayer.id + ')" data-role="flipswitch" data-mini="true"><option value="off">Av</option><option value="on">På</option></select></td>' +
+                        //<a href="#" onclick="swapPlayer(' + newPlayer.id + ')" class="ui-btn ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-notext">Bytt</a></td>' +
+                        "</tr>";
+                $("#player-table").append(newRow)
+                $("#flip" + newPlayer.id).slider();
+                return false;
+            });
+        });
+
+    </script>
+</body>
+</html>
