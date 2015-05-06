@@ -14,10 +14,10 @@ function Player(name) {
         interval: 0,
         callback: function () {
             var currentLap = self.timeInPosition.lap()
-            $('#current' + self.id).val(self.timeInPosition.msToTimecode(currentLap));
+            $('#current' + self.id).text(self.timeInPosition.msToTimecode(currentLap));
 
             if (!self.sub){
-                $('#total' + self.id).val(self.timeInPosition.msToTimecode(currentLap + self.timerPlayed));
+                $('#total' + self.id).text(self.timeInPosition.msToTimecode(currentLap + self.timerPlayed));
             }
         }
     });

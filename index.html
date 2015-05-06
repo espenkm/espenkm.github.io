@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
     <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="http://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 
     <script src="tock.js" type="text/javascript"></script>
     <script src="player.js" type="text/javascript"></script>
@@ -18,7 +19,6 @@
         <div data-role="header" data-position="fixed">
             <div data-role="navbar">
                 <ul>
-                    <li><a href="#" onclick="startOrStopAll()" data-icon="info"></a></li>
                     <li><a href="#" id="startOrStopAll" data-icon="clock"></a></li>
                     <li><a href="#popupLogin"
                            data-rel="popup"
@@ -34,7 +34,7 @@
                 <div style="padding:10px 20px;">
                     <h3>Legg til spiller</h3>
                     <label for="addPlayerName" class="ui-hidden-accessible">Navn:</label>
-                    <input type="text"  id="addPlayerName" value="" placeholder="spiller" data-theme="a" />
+                    <input type="text"  id="addPlayerName" value="" placeholder="spiller"/>
 
                     <button id="addPlayer" type="submit">Legg til</button>
                 </div>
@@ -66,6 +66,7 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
+
             swapPlayer = function(id) {
                 players[id].swap();
                 return false;
@@ -91,19 +92,25 @@
 
                 players[players.length] = newPlayer;
 
-                var newRow = '<tr valign="top">' +
+                var newRow = '<tr>' +
                         "<td>" + newPlayer.name + "</td>" +
-                        '<td><input type="text"  id="current' + newPlayer.id + '" placeholder="00:00" data-theme="a"/></td>' +
-                        '<td><input type="text"  id="total' + newPlayer.id + '" placeholder="00:00" data-theme="a"/></td>' +
-                        '<td><select id="flip' + newPlayer.id + '" onchange="swapPlayer(' + newPlayer.id + ')" data-role="flipswitch" data-mini="true"><option value="off">Av</option><option value="on">På</option></select></td>' +
-                        //<a href="#" onclick="swapPlayer(' + newPlayer.id + ')" class="ui-btn ui-shadow ui-corner-all ui-icon-refresh ui-btn-icon-notext">Bytt</a></td>' +
+                        '<td><div id="current' + newPlayer.id + '"/></td>' +
+                        '<td><div id="total' + newPlayer.id + '"/></td>' +
+                        '<td><select id="flip' + newPlayer.id + '" onchange="swapPlayer(' + newPlayer.id + ')" data-role="flipswitch" ><option value="off">Av</option><option value="on">På</option></select></td>' +
                         "</tr>";
                 $("#player-table").append(newRow)
                 $("#flip" + newPlayer.id).slider();
+
+                $("#addPlayerName").select();
                 return false;
             });
+
         });
 
     </script>
+
+    <div data-role="header" data-position="footer">
+        <div id="total_time" />
+    </div>
 </body>
 </html>
